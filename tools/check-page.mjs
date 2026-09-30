@@ -48,6 +48,21 @@ for (const ref of [...new Set(refs)]) {
   else bad(`引用了不存在的文件：${ref}`);
 }
 
+// 作品卡片由 works-data.js 数据驱动，图片不再直接写在 HTML 里。
+// 这里额外检查数据文件中 image: '...' 的本地路径，防止新增作品时写错路径，
+// 要等页面渲染出来才发现封面图挂了。
+const dataPath = path.join(root, 'works-data.js');
+if (fs.existsSync(dataPath)) {
+  const data = fs.readFileSync(dataPath, 'utf8');
+  const dataRefs = [...new Set([...data.matchAll(/image:\s*'([^']+)'/g)]
+    .map((m) => m[1])
+    .filter((v) => !/^([a-z][a-z0-9+.-]*:|#|\/\/)/i.test(v)))];
+  for (const ref of dataRefs) {
+    if (fs.existsSync(path.join(root, ref))) ok(`works-data.js → ${ref}`);
+    else bad(`works-data.js 引用了不存在的文件：${ref}`);
+  }
+}
+
 console.log('\n== 3. 页内锚点 ==');
 const ids = new Set([...html.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]));
 const anchors = [...new Set([...html.matchAll(/href="#([^"]+)"/g)].map((m) => m[1]))];

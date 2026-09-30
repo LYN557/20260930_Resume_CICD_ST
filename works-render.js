@@ -13,6 +13,8 @@ let newestFirst = true
 function createWorkCard(work) {
   const item = document.createElement('li')
   item.className = 'work-card'
+  // tint 可选：数据里给了才追加 .work-<tint>，封面底色由 CSS 按此类名区分
+  if (work.tint) item.classList.add(`work-${work.tint}`)
 
   // 年份徽标，贴在封面右上角
   const year = document.createElement('span')

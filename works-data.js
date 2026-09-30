@@ -4,13 +4,15 @@
 // 想加一个作品，只在这里加一个对象，HTML 一个字都不用动。
 // 这是本课最重要的一个观念。
 //
-// 六个字段各管一件事：
+// 字段说明：
 //   title        卡片标题
 //   description  一句话说明
-//   image        封面图路径
+//   image        封面图路径（文件放进 assets/ 后写这里，CI 会检查文件是否存在）
 //   url          点击去哪
 //   year         年份，用来排序和显示右上角徽标
 //   tags         标签数组，用来筛选。一个作品可以有多个标签
+//   tint         可选，封面底色名，对应 styles.css 的 .work-<名字> .work-cover；
+//                不需要特殊底色就省略，使用默认底色
 const works = [
   {
     title: '长风成卷 · 博客应用',
@@ -43,5 +45,6 @@ const works = [
     url: 'https://ffd-p5-music-station.netlify.app/',
     year: 2025,
     tags: ['前端', '测试'],
+    tint: 'music-station',
   },
 ]

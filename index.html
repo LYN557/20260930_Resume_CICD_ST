@@ -9,17 +9,28 @@
    我的个人主页
   </title>
   <link href="assets/favicon.svg" rel="icon" type="image/svg+xml"/>
-  <!-- CSS 负责颜色、字体、布局；defer 让 JavaScript 在 HTML 解析完成后执行。 -->
+  <!-- 样式集中在 styles.css；脚本用 defer，等 HTML 解析完再执行，顺序不可调换（数据 → 渲染 → 交互）。 -->
   <link href="styles.css" rel="stylesheet"/>
-   <script src="works-data.js" defer></script>
+  <script src="works-data.js" defer></script>
   <script src="works-render.js" defer></script>
   <script src="app.js" defer></script>
  </head>
  <body>
+  <!-- ============================================================
+       维护指南：更新简历只改对应区块，不必通读全文
+       · 姓名/方向/照片/联系方式 → <section id="about">
+       · 教育与工作经历           → <section id="experience">（复制一条 .experience-item）
+       · 项目经历                → <section id="projects">（复制一条 .research-item）
+       · 技能                   → <section id="skills">
+       · 作品                   → 只改 works-data.js，增删一个对象即可，本文件不用动
+       · 目标/记录               → <section id="teaching">、<section id="publications">
+       · 新增顶部导航栏目：nav 里加锚点链接，并给对应 section 配相同 id
+       区块统一结构：section > .container > .section-heading（标题）+ .section-content（内容）
+       ============================================================ -->
   <a class="skip-link" href="#main">
    跳到正文
   </a>
-  <!-- 第 4 课新增①：顶部阅读进度条，宽度由 JavaScript 控制 -->
+  <!-- 顶部阅读进度条，宽度由 app.js 按滚动比例设置 -->
   <div class="reading-progress" id="reading-progress">
   </div>
   <header class="site-header">
@@ -27,7 +38,8 @@
     <a class="brand" href="#about">
      我的主页
     </a>
-    <!-- href="#栏目ID" 是原生锚点：即使不加载 JavaScript，也能跳到对应栏目。 -->
+    <!-- 导航链接是「#加栏目 id」形式的原生锚点，无需 JS 即可跳转；
+         新增栏目时链接指向必须与下方 section 的 id 完全一致（CI 会自动校验）。 -->
     <nav aria-label="主导航">
      <a href="#about">
       关于
@@ -54,7 +66,7 @@
    </div>
   </header>
   <main id="main">
-   <!-- HTML 练习：修改姓名、研究方向、照片路径和联系方式。 -->
+   <!-- 个人信息区：姓名、身份、学校、方向、照片、联系方式都在这里改。 -->
    <section class="hero" id="about">
     <div class="container">
      <div class="hero-top">
@@ -122,7 +134,7 @@
      </div>
     </div>
    </section>
-   <!-- 每个栏目复用 section → container → 标题/内容 的结构，统一由 CSS 控制样式。 -->
+   <!-- 以下栏目统一结构：section.section > .container > .section-heading（标题）+ .section-content（内容），样式由 styles.css 统一控制。 -->
    <section class="section" id="experience">
     <div class="container">
      <header class="section-heading">
@@ -131,7 +143,7 @@
       </h2>
      </header>
      <div class="section-content">
-      <!-- TASK-HTML：复制 experience-item 可增加一条自己的经历。 -->
+      <!-- 增加一条经历：完整复制这一个 .experience-item 块，再改文字。 -->
       <div class="experience-item">
        <p class="experience-heading">
         <strong>
@@ -156,6 +168,7 @@
       </h2>
      </header>
      <div class="section-content">
+      <!-- 增加一个项目：完整复制这一个 .research-item 块。 -->
       <article class="research-item">
        <h3>
         <time>
@@ -211,8 +224,7 @@
        以下为教学示例，完成后可替换为自己的作品。
       </p>
      </header>
-     <!-- 第 5 课新增：筛选与排序工具条。里面的按钮由 JavaScript 生成，
-          不写 JS 时这里是空的，页面照常显示全部作品。 -->
+     <!-- 工具条（标签筛选 + 年份排序）由 works-render.js 根据作品数据自动生成，按钮无需手写。 -->
      <div class="works-toolbar">
       <div class="works-tags" id="works-tags">
       </div>
@@ -220,68 +232,16 @@
        按年份：新→旧
       </button>
      </div>
+     <!-- 作品卡片不要在 HTML 里手写：由 works-render.js 读取 works-data.js 统一渲染。
+          增删作品只改 works-data.js，避免“数据 + 页面”两处重复、改漏不一致。 -->
      <ol class="portfolio-list">
-      <li class="work-card work-blog">
-       <a href="https://ffd-p2-blog.netlify.app/" rel="noopener noreferrer" target="_blank">
-        <div class="work-cover">
-         <img alt="长风成卷 · 博客应用的实际网页截图" decoding="async" height="800" src="assets/work-blog.png" width="1200"/>
-        </div>
-        <div class="work-copy">
-         <h3>
-          长风成卷 · 博客应用
-         </h3>
-         <p>
-          文章展示、接口与数据库。
-         </p>
-        </div>
-       </a>
-      </li>
-      <li class="work-card work-community">
-       <a href="https://ffd-p3-community.netlify.app/" rel="noopener noreferrer" target="_blank">
-        <div class="work-cover">
-         <img alt="群像云图 · 社区应用的实际网页截图" decoding="async" height="800" src="assets/work-community.png" width="1200"/>
-        </div>
-        <div class="work-copy">
-         <h3>
-          群像云图 · 社区应用
-         </h3>
-         <p>
-          内容发布与社区互动。
-         </p>
-        </div>
-       </a>
-      </li>
-      <li class="work-card work-greeting-card">
-       <a href="https://ffd-p4-greeting-card.netlify.app/" rel="noopener noreferrer" target="_blank">
-        <div class="work-cover">
-         <img alt="一笺心意 · 祝福卡片的实际网页截图" decoding="async" height="800" src="assets/work-greeting-card.png" width="1200"/>
-        </div>
-        <div class="work-copy">
-         <h3>
-          一笺心意 · 祝福卡片
-         </h3>
-         <p>
-          卡片制作与作品分享。
-         </p>
-        </div>
-       </a>
-      </li>
-      <li class="work-card work-music-station">
-       <a href="https://ffd-p5-music-station.netlify.app/" rel="noopener noreferrer" target="_blank">
-        <div class="work-cover">
-         <img alt="星声音乐站 · 音乐应用的实际网页截图" decoding="async" height="800" src="assets/work-music-station.png" width="1200"/>
-        </div>
-        <div class="work-copy">
-         <h3>
-          星声音乐站 · 音乐应用
-         </h3>
-         <p>
-          网页音频与交互实践。
-         </p>
-        </div>
-       </a>
-      </li>
      </ol>
+     <!-- 禁用 JavaScript 时的兜底提示，正常浏览时不显示。 -->
+     <noscript>
+      <p class="works-notice">
+       作品列表由 JavaScript 加载，请启用 JavaScript 后查看。
+      </p>
+     </noscript>
     </div>
    </section>
    <section class="section" id="teaching">
@@ -336,7 +296,7 @@
     </div>
    </section>
   </main>
-  <!-- 第 4 课新增：这两块由 JavaScript 控制，不写 JS 时它们不会出现 -->
+  <!-- 以下两处由 app.js 控制：右下角栏目指示器、返回顶部按钮（默认隐藏，滚动后出现）。 -->
   <p aria-live="polite" class="section-indicator" id="section-indicator">
   </p>
   <button aria-label="返回页面顶部" class="to-top" id="to-top" type="button">
